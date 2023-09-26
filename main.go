@@ -21,11 +21,40 @@ import (
 
 func main() {
 	urlFlag := flag.String("url", "https://gophercises.com", "the URL that you want to build a sitemap for")
+	maxDepth := flag.Int("depth", 9, "maximum number of links to traverse")
 	flag.Parse()
-	pages := get(*urlFlag)
+	pages := bfs(*urlFlag, *maxDepth)
 	for _, page := range pages {
 		fmt.Println(page)
 	}
+}
+
+type empty struct{}
+
+func bfs(urlStr string, maxDepth int) []string {
+	seen := make(map[string]empty)
+	var q map[string]empty
+	nq := map[string]empty{
+		urlStr: {},
+	}
+	for i := 0; i <= maxDepth; i++ {
+		q, nq = nq, make(map[string]empty)
+		for url := range q {
+			if _, ok := seen[url]; ok {
+				continue
+			}
+			seen[url] = empty{}
+			for _, link := range get(url) {
+				nq[link] = empty{}
+			}
+
+		}
+	}
+	ret := make([]string, 0, len(seen))
+	for url := range seen {
+		ret = append(ret, url)
+	}
+	return ret
 }
 
 func get(urlStr string) []string {
