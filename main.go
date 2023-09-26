@@ -46,7 +46,7 @@ func main() {
 	fmt.Print(xml.Header)
 	enc := xml.NewEncoder(os.Stdout)
 	enc.Indent("", "  ")
-	if err := enc.Encode(toXml); err != nil {
+	if err := enc.Encode(toXml); err != nil { 
 		log.Println("failed to encode sitemap", err)
 	}
 	fmt.Println()
@@ -94,7 +94,7 @@ func get(urlStr string) []string {
 	reqUrl := resp.Request.URL
 
 	baseUrl := &url.URL{
-		Scheme: reqUrl.Scheme,
+		Scheme:  reqUrl.Scheme,
 		Host:   reqUrl.Host,
 	}
 	base := baseUrl.String()
@@ -110,7 +110,6 @@ func hrefs(r io.Reader, base string) []string {
 			ret = append(ret, base+l.Href)
 		case strings.HasPrefix(l.Href, "http"):
 			ret = append(ret, l.Href)
-
 		}
 	}
 	return ret
